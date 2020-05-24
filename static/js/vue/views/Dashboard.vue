@@ -50,7 +50,7 @@
           <v-card>
             <div class="mx-4">
               <div class="subtitle-2 text--secondary">
-                Repo: {{Repo}}
+                Local Repo: {{Repo}}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn icon @click="startExplorer" v-on="on">
@@ -60,7 +60,7 @@
                   <span>View in File Explorer</span>
                 </v-tooltip>
               </div>
-              <div class="subtitle-2 text--secondary">Cache: {{DbLite}}</div>
+              <div class="subtitle-2 text--secondary">DB local: {{DbLite}}</div>
             </div>
             <v-expansion-panels :flat="true">
               <v-expansion-panel>

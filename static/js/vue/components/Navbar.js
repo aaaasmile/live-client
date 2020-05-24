@@ -7,7 +7,7 @@ export default {
     return {
       drawer: false,
       links: routes,
-      AppTitle: "Live Client"
+      AppTitle: "Client"
     }
   },
   template: `
@@ -23,5 +23,6 @@ export default {
       <v-spacer></v-spacer>
     </v-app-bar>
     <Toast></Toast>
-  </nav>`
+  </nav>
+`
 }
