@@ -1,0 +1,3 @@
+== TODO
+[] Editor dei file per inserire un contenuto
+[] Aggiungi delete e edit come action

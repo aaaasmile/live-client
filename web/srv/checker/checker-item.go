@@ -118,8 +118,8 @@ func NewCheckerItem(pt PresenceType, oi *idl.ObjectInfo) *CheckerItem {
 		VersionExp:   oi.VersionList,
 		DateTimeExp:  fmt.Sprintf("Time is %s", oi.Timestamp.Format("02-01-2006 15:04:05")),
 	}
-	fmt.Println("*** timestamp unix", oi.Timestamp.Local().Unix())
-	fmt.Println("*** DateTimeExp", ci.DateTimeExp)
+	//fmt.Println("*** timestamp unix", oi.Timestamp.Unix())
+	//fmt.Println("*** DateTimeExp", ci.DateTimeExp)
 	return &ci
 }
 

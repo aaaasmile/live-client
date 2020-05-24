@@ -99,7 +99,7 @@ func (ld *LiteDB) deleteSourceFile(tx *sql.Tx, recID int) error {
 }
 
 func (ld *LiteDB) updateFile(tableName string, tx *sql.Tx, srcItem *idl.SourceFile) error {
-	//fmt.Println("** oi updateFile ", srcItem.FileModTime, srcItem.FileModTime.Local().Unix(), srcItem)
+	//fmt.Println("** oi updateFile ", srcItem.FileModTime, srcItem.FileModTime.Unix(), srcItem)
 	var q string
 	recID := srcItem.DbLiteID
 	if recID == 0 {
@@ -108,7 +108,7 @@ func (ld *LiteDB) updateFile(tableName string, tx *sql.Tx, srcItem *idl.SourceFi
 
 	q = fmt.Sprintf(`UPDATE %s SET VersionList='%s',Filename='%s',Checksum='%s',FileModTime=%d,FileSize=%d WHERE id=%d;`,
 		tableName,
-		srcItem.VersionList, srcItem.Filename, srcItem.Checksum, srcItem.FileModTime.Local().Unix(), srcItem.FileSize,
+		srcItem.VersionList, srcItem.Filename, srcItem.Checksum, srcItem.FileModTime.Unix(), srcItem.FileSize,
 		recID)
 
 	if ld.DebugSQL {
@@ -186,7 +186,7 @@ func (ld *LiteDB) insertFile(tableName string, tx *sql.Tx, srcItem *idl.SourceFi
 	}
 
 	_, err = tx.Stmt(insertMore).Exec(srcItem.Name, srcItem.ObjectID, srcItem.VersionList, srcItem.Checksum,
-		srcItem.Filename, srcItem.FileModTime.Local().Unix(), srcItem.FileSize)
+		srcItem.Filename, srcItem.FileModTime.Unix(), srcItem.FileSize)
 	if err != nil {
 		return err
 	}

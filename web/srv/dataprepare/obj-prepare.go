@@ -120,7 +120,7 @@ func (p *ObjectInfoPre) sourceFilter(fileInfo os.FileInfo) bool {
 		objNew := idl.NewObjectInfoFromSF(*srcItem)
 		if srcItem.FileSize == int(fileInfo.Size()) {
 			tmf := fileInfo.ModTime()
-			if srcItem.FileModTime.Local().Unix() == tmf.Local().Unix() {
+			if srcItem.FileModTime.Unix() == tmf.Unix() {
 				p.countTouch++
 				p.Store.InsertOrUpdateSingleObj(objNew)
 				return false
