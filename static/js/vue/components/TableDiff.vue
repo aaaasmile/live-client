@@ -12,9 +12,28 @@
       show-select
       class="elevation-1"
       :search="search"
+      :footer-props="{
+      showFirstLastPage: true,
+      firstIcon: 'mdi-arrow-collapse-left',
+      lastIcon: 'mdi-arrow-collapse-right',
+      prevIcon: 'mdi-minus',
+      nextIcon: 'mdi-plus'
+    }"
     >
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="deleteItem(item)">mdi-bin</v-icon>
+        <v-icon small class="mr-2" @click="compareDiff(item)">mdi-eye</v-icon>
+      </template>
+      <template v-slot:item.PresenceType="{ item }">
+        <v-chip
+          :color="getColorPres(item.PresenceType, item.DateTimeEqual)"
+          dark
+        >{{ item.PresenceType }}</v-chip>
+      </template>
+      <template v-slot:item.DateTimeEqual="{ item }">
+        <v-chip :color="getColorDte(item.DateTimeEqual)" dark>{{ item.DateTimeEqual }}</v-chip>
+      </template>
+      <template v-slot:item.OtherDiffType="{ item }">
+        <v-chip :color="getColorOtherDiff(item.OtherDiffType)" dark>{{ item.OtherDiffType }}</v-chip>
       </template>
     </v-data-table>
   </v-card>

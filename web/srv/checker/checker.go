@@ -35,16 +35,16 @@ func (ck *Checker) String() string {
 func (ck *Checker) CreateResultView(storeServer, storeSourceFile *Store) {
 	log.Printf("Compare %d server items with %d source file items\n", len(storeServer.InfoObjects), len(storeSourceFile.InfoObjects))
 	res := []*CheckerItem{}
-	onlyInNav := CheckerItemColl{}
+	onlyRemote := CheckerItemColl{}
 	onlyInSourceFile := CheckerItemColl{}
-	diffNavFile := CheckerItemColl{}
+	diffRemote := CheckerItemColl{}
 	ck.DiffCount, ck.EqualCount, ck.ServerOnlyCount, ck.FileSourceOnlyCount = 0, 0, 0, 0
 
 	for k1, item1 := range storeServer.InfoObjects {
 		ci := NewCheckerItem(PresTypeServerOnly, item1)
 		if item2, ok := storeSourceFile.InfoObjects[k1]; ok {
 			if ci.HasDiff(item1, item2) {
-				diffNavFile = append(diffNavFile, ci)
+				diffRemote = append(diffRemote, ci)
 			} else {
 				if ck.Debug {
 					//log.Println("same item: ", item2)
@@ -52,7 +52,7 @@ func (ck *Checker) CreateResultView(storeServer, storeSourceFile *Store) {
 				ck.EqualCount++
 			}
 		} else {
-			onlyInNav = append(onlyInNav, ci)
+			onlyRemote = append(onlyRemote, ci)
 		}
 	}
 
@@ -62,17 +62,17 @@ func (ck *Checker) CreateResultView(storeServer, storeSourceFile *Store) {
 			onlyInSourceFile = append(onlyInSourceFile, ci)
 		}
 	}
-	ll1 := len(onlyInNav)
+	ll1 := len(onlyRemote)
 	ll2 := len(onlyInSourceFile)
-	ldif := len(diffNavFile)
+	ldif := len(diffRemote)
 	ck.DiffCount, ck.ServerOnlyCount, ck.FileSourceOnlyCount = ldif, ll1, ll2
 
 	if ll1 > 0 {
 		if ck.Debug {
 			log.Println("Elements on Server only: ", ll1)
 		}
-		sort.Sort(onlyInNav)
-		for _, item := range onlyInNav {
+		sort.Sort(onlyRemote)
+		for _, item := range onlyRemote {
 			res = append(res, item)
 		}
 	}
@@ -90,8 +90,8 @@ func (ck *Checker) CreateResultView(storeServer, storeSourceFile *Store) {
 		if ck.Debug {
 			log.Println("Elements different: ", ldif)
 		}
-		sort.Sort(diffNavFile)
-		for _, item := range diffNavFile {
+		sort.Sort(diffRemote)
+		for _, item := range diffRemote {
 			res = append(res, item)
 		}
 	}

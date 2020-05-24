@@ -56,7 +56,7 @@ func (ld *LiteDB) DoReadAllObj(ot idl.ObjTypeInProv) ([]*idl.ObjectInfo, error) 
 func (ld *LiteDB) DoInsertObject(tx *sql.Tx, obj *idl.ObjectInfo, ot idl.ObjTypeInProv) error {
 	switch ot {
 	case idl.OTPServerFile:
-		return ld.insertFile("ServerFile", tx, &obj.ServerFile)
+		return ld.insertFile("ServerFile", tx, &obj.SourceFile)
 	case idl.OTPSourceFile:
 		return ld.insertFile("SourceFile", tx, &obj.SourceFile)
 	}
@@ -66,7 +66,7 @@ func (ld *LiteDB) DoInsertObject(tx *sql.Tx, obj *idl.ObjectInfo, ot idl.ObjType
 func (ld *LiteDB) DoUpdateObject(tx *sql.Tx, obj *idl.ObjectInfo, ot idl.ObjTypeInProv) error {
 	switch ot {
 	case idl.OTPServerFile:
-		return ld.updateFile("ServerFile", tx, &obj.ServerFile)
+		return ld.updateFile("ServerFile", tx, &obj.SourceFile)
 	case idl.OTPSourceFile:
 		return ld.updateFile("SourceFile", tx, &obj.SourceFile)
 	}

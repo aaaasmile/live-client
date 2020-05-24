@@ -43,7 +43,6 @@ func (st *Store) InsertOrUpdateSingleObj(oi *idl.ObjectInfo) idl.ObjOpChangeType
 		if !oi.IsEqual(st.InfoObjects[key]) {
 			oldOi := st.InfoObjects[key]
 			ntfy.Obj.SourceFile.DbLiteID = oldOi.SourceFile.DbLiteID
-			ntfy.Obj.ServerFile.DbLiteID = oldOi.ServerFile.DbLiteID
 
 			ntfy.ChangeType = idl.OOCTupdate
 			st.chChanges <- ntfy

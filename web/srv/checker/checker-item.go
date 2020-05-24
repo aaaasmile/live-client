@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/aaaasmile/live-client/util"
@@ -115,8 +116,10 @@ func NewCheckerItem(pt PresenceType, oi *idl.ObjectInfo) *CheckerItem {
 		PresenceType: pt,
 		Name:         oi.Name,
 		VersionExp:   oi.VersionList,
-		DateTimeExp:  oi.Timestamp.Format("02-01-2006 15:01:02"),
+		DateTimeExp:  fmt.Sprintf("Time is %s", oi.Timestamp.Format("02-01-2006 15:04:05")),
 	}
+	fmt.Println("*** timestamp unix", oi.Timestamp.Local().Unix())
+	fmt.Println("*** DateTimeExp", ci.DateTimeExp)
 	return &ci
 }
 
@@ -152,10 +155,10 @@ func (ci *CheckerItem) HasDiff(serverItem *idl.ObjectInfo, sourceItem *idl.Objec
 	}
 
 	srcVerList := normalizeVersionList(sourceItem.VersionList)
-	navVerList := normalizeVersionList(serverItem.VersionList)
-	ci.VersionListEqual = (navVerList == srcVerList)
+	remoteVerList := normalizeVersionList(serverItem.VersionList)
+	ci.VersionListEqual = (remoteVerList == srcVerList)
 	// if !ci.VersionListEqual {
-	// 	fmt.Printf("*** diff VL: %s --- %s\n", navVerList, srcVerList)
+	// 	fmt.Printf("*** diff VL: %s --- %s\n", remoteVerList, srcVerList)
 	// }
 
 	ci.PresenceType = PresTypeBoth
@@ -190,7 +193,7 @@ func (ci *CheckerItem) HasDiff(serverItem *idl.ObjectInfo, sourceItem *idl.Objec
 		ci.AreEqual = ci.AreEqual && (ci.ContentEqual == ContentSame)
 	}
 
-	ci.DateTimeExp2 = sourceItem.Timestamp.Format("02-01-2006 15:01:02")
+	ci.DateTimeExp2 = sourceItem.Timestamp.Format("02-01-2006 15:04:05")
 	ci.VersionExp2 = sourceItem.VersionList
 
 	return !ci.AreEqual

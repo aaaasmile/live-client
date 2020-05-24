@@ -131,7 +131,7 @@ func (hc *HandlerPrjReq) HandleViewCurrentDiff(w http.ResponseWriter, req *http.
 	hc.storeSeverFile = &storeServer
 	hc.storeSourceFile = &storeSourceFile
 
-	log.Printf("Store len nav %d, source file %d", len(storeServer.InfoObjects), len(storeSourceFile.InfoObjects))
+	log.Printf("Store len: Remote %d, Source file %d", len(storeServer.InfoObjects), len(storeSourceFile.InfoObjects))
 
 	return hc.doCompare(w)
 }
