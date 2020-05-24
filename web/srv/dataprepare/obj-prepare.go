@@ -89,12 +89,7 @@ func (p *ObjectInfoPre) scanSourceFiles() error {
 		} else {
 			objNew := idl.NewObjectInfoFromSF(itemSource.SourceFile)
 			//fmt.Println("*** objNew in source ", objNew.SourceFile)
-			{
-				p.Store.DeleteStoreKey(objNew.Key)
-				if p.Debug {
-					log.Println("Ignore Source ", objNew.Key)
-				}
-			}
+			p.Store.InsertOrUpdateSingleObj(objNew)
 			count++
 		}
 	}
@@ -109,7 +104,11 @@ func (p *ObjectInfoPre) sourceFilter(fileInfo os.FileInfo) bool {
 	// function returns true if the file needs to be fully rescanned
 	fname := fileInfo.Name()
 
-	srcItem := p.getSourceFileOnFileName(fname)
+	srcItem, err := p.getSourceFileOnFileName(fname)
+	if err != nil {
+		log.Println("Ignore item because error ", fname, err)
+		return false
+	}
 	if srcItem == nil {
 		//fmt.Println("**File not in store", fname)
 		return true
@@ -123,12 +122,7 @@ func (p *ObjectInfoPre) sourceFilter(fileInfo os.FileInfo) bool {
 			tmf := fileInfo.ModTime()
 			if srcItem.FileModTime.Local().Unix() == tmf.Local().Unix() {
 				p.countTouch++
-				{
-					p.Store.DeleteStoreKey(objNew.Key)
-					if p.Debug {
-						log.Println("Ignore Source ", objNew.Key)
-					}
-				}
+				p.Store.InsertOrUpdateSingleObj(objNew)
 				return false
 			}
 		}
@@ -136,14 +130,16 @@ func (p *ObjectInfoPre) sourceFilter(fileInfo os.FileInfo) bool {
 	return true
 }
 
-func (p *ObjectInfoPre) getSourceFileOnFileName(fname string) *idl.SourceFile {
-	var name, id string
-	fmt.Sscanf(fname, "%s-%d", &name, &id)
-
-	if p.Store.InfoObjects[id] != nil {
-		return &p.Store.InfoObjects[id].SourceFile
+func (p *ObjectInfoPre) getSourceFileOnFileName(fname string) (*idl.SourceFile, error) {
+	tmp := idl.SourceFile{}
+	if err := tmp.FillFromFname(fname); err != nil {
+		return nil, err
 	}
-	return nil
+
+	if p.Store.InfoObjects[tmp.ObjectID] != nil {
+		return &p.Store.InfoObjects[tmp.ObjectID].SourceFile, nil
+	}
+	return nil, nil
 }
 
 type FunAskForScan func(fileInfo os.FileInfo) bool
@@ -196,6 +192,7 @@ func (p *ObjectInfoPre) startScanFiles(wg *sync.WaitGroup, toprocess []os.FileIn
 
 		tokens <- struct{}{}
 		for _, fileInfo := range filesToProc {
+			log.Println("Scan file ", fileInfo.Name())
 			var res idl.SourceFileWithErr
 			var name, id, fname, version string
 			fname = fileInfo.Name()

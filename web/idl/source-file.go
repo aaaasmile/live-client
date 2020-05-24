@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/aaaasmile/live-client/util"
@@ -33,6 +34,32 @@ func (sf *SourceFile) CreateNewFile(dirTo, name string) error {
 	sf.VersionList = initialVersion
 
 	log.Println("Created an empty file ", intName, id, fsrc)
+	return nil
+}
+
+func (sf *SourceFile) FillFromFname(fname string) error {
+	var name, id, version string
+	//fmt.Println("*** FillFromFname ", fname)
+	arr := strings.Split(fname, "-")
+	if len(arr) != 3 {
+		return fmt.Errorf("File name structure unrecognized")
+	}
+	name = arr[0]
+	id = arr[1]
+	version = arr[2]
+	//fmt.Println("*** FillFromFname res ", name, id, version)
+	if version == "" {
+		return fmt.Errorf("Version is empty")
+	}
+	sf.VersionList = version
+	sf.Name = name
+	if name == "" {
+		return fmt.Errorf("Name is empty")
+	}
+	sf.ObjectID = id
+	if id == "" {
+		return fmt.Errorf("Id is empty")
+	}
 	return nil
 }
 

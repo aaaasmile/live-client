@@ -34,6 +34,7 @@ func (s *StoreSynchronizer) ListenChanges(chChanges chan idl.ObjInfoChange, prov
 
 	go func() {
 		log.Println("Start listening for changes", s.ObjTypeInProv.String())
+		haschanges := false
 	loop:
 		for {
 			select {
@@ -42,6 +43,7 @@ func (s *StoreSynchronizer) ListenChanges(chChanges chan idl.ObjInfoChange, prov
 					log.Println("change arrived ", oic, more)
 				}
 				if more {
+					haschanges = true
 					switch oic.ChangeType {
 					case idl.OOCTupdate:
 						s.addForUpdate(oic.Obj)
@@ -69,12 +71,15 @@ func (s *StoreSynchronizer) ListenChanges(chChanges chan idl.ObjInfoChange, prov
 				return
 			}
 		}
-		log.Println("start flush...")
-		err := s.flushSynchInProvider(prov)
-		if err != nil {
-			log.Println("-+- Flush sync error ", err)
+		var err error
+		if haschanges {
+			log.Println("start flush...")
+			err = s.flushSynchInProvider(prov)
+			if err != nil {
+				log.Println("-+- Flush sync error ", err)
+			}
+			log.Println("end flush")
 		}
-		log.Println("end flush")
 		readyMe <- idl.ResErr{Err: err}
 		close(readyMe)
 	}()

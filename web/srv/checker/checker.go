@@ -12,7 +12,7 @@ type AskFetchSourceFn func() (*idl.SourceFile, error)
 
 type Checker struct {
 	ResultView          []*CheckerItem
-	NavOnlyCount        int
+	ServerOnlyCount     int
 	FileSourceOnlyCount int
 	EqualCount          int
 	DiffCount           int
@@ -27,18 +27,18 @@ func (ck *Checker) String() string {
 	res += "\n"
 	res += fmt.Sprintf("Diff: %d\n", ck.DiffCount)
 	res += fmt.Sprintf("Equal: %d\n", ck.EqualCount)
-	res += fmt.Sprintf("Nav only: %d\n", ck.NavOnlyCount)
+	res += fmt.Sprintf("Server only: %d\n", ck.ServerOnlyCount)
 	res += fmt.Sprintf("FileSource only: %d\n", ck.FileSourceOnlyCount)
 	return res
 }
 
 func (ck *Checker) CreateResultView(storeServer, storeSourceFile *Store) {
-	log.Printf("Compare %d navobjects with %d source file items\n", len(storeServer.InfoObjects), len(storeSourceFile.InfoObjects))
+	log.Printf("Compare %d server items with %d source file items\n", len(storeServer.InfoObjects), len(storeSourceFile.InfoObjects))
 	res := []*CheckerItem{}
 	onlyInNav := CheckerItemColl{}
 	onlyInSourceFile := CheckerItemColl{}
 	diffNavFile := CheckerItemColl{}
-	ck.DiffCount, ck.EqualCount, ck.NavOnlyCount, ck.FileSourceOnlyCount = 0, 0, 0, 0
+	ck.DiffCount, ck.EqualCount, ck.ServerOnlyCount, ck.FileSourceOnlyCount = 0, 0, 0, 0
 
 	for k1, item1 := range storeServer.InfoObjects {
 		ci := NewCheckerItem(PresTypeServerOnly, item1)
@@ -65,7 +65,7 @@ func (ck *Checker) CreateResultView(storeServer, storeSourceFile *Store) {
 	ll1 := len(onlyInNav)
 	ll2 := len(onlyInSourceFile)
 	ldif := len(diffNavFile)
-	ck.DiffCount, ck.NavOnlyCount, ck.FileSourceOnlyCount = ldif, ll1, ll2
+	ck.DiffCount, ck.ServerOnlyCount, ck.FileSourceOnlyCount = ldif, ll1, ll2
 
 	if ll1 > 0 {
 		if ck.Debug {
