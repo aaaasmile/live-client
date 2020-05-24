@@ -24,7 +24,7 @@ func handleIndexGet(w http.ResponseWriter, req *http.Request) error {
 	pagectx := PageCtx{
 		RootUrl: conf.Current.RootURLPattern,
 		Buildnr: idl.Buildnr,
-		Repo:    conf.Current.RepoSync,
+		Repo:    conf.Current.SyncRepo,
 		DbLite:  conf.Current.SqliteDBPath,
 	}
 	templName := "template/vue/index.html"

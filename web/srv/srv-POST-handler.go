@@ -23,6 +23,7 @@ type HandlerPrjReq struct {
 	DebugSQL            bool
 	Debug               bool
 	chSourceFilePersist chan idl.ResErr
+	chServerFilePersist chan idl.ResErr
 }
 
 type DoWithSelectionReq struct {
