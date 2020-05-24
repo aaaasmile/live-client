@@ -85,7 +85,7 @@ func (p *ObjectInfoPre) scanSourceFiles() error {
 	//p.Store.Debug = true
 	for itemSource := range chanSources {
 		if itemSource.Err != nil {
-			log.Println("Ignore processing on file because error: ", itemSource.Err)
+			log.Println("WARN Ignore processing on file because error: ", itemSource.Err)
 		} else {
 			objNew := idl.NewObjectInfoFromSF(itemSource.SourceFile)
 			//fmt.Println("*** objNew in source ", objNew.SourceFile)
@@ -106,7 +106,7 @@ func (p *ObjectInfoPre) sourceFilter(fileInfo os.FileInfo) bool {
 
 	srcItem, err := p.getSourceFileOnFileName(fname)
 	if err != nil {
-		log.Println("Ignore item because error ", fname, err)
+		log.Println("WARN Ignore item because error ", fname, err)
 		return false
 	}
 	if srcItem == nil {
