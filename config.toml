@@ -11,3 +11,4 @@ IgnoreFatalErrorsInDB = false
 DebugSQL = false
 DebugParser = false
 SqliteDBPath = "D:\\scratch\\go-lang\\live-client\\db\\live-client.db"
+RepoSync = "D:\\scratch\\go-lang\\live-client\\repo-sync"

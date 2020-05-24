@@ -23,6 +23,7 @@ export const app = new Vue({
   },
   created() {
     this.Buildnr = window.myapp.buildnr
+    this.$store.commit('project', window.myapp.prj)
   },
   methods: {
 

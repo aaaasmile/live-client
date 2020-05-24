@@ -2,8 +2,16 @@ export default {
   state: {
     errorText: '',
     msgText: '',
+    prj: {
+      repo: '',
+      deblite: '',
+    }
   },
   mutations: {
+    project(state, prj){
+      state.prj.repo = prj.repo
+      state.prj.deblite = prj.deblite
+    },
     errorText(state, msg) {
       state.errorText = msg
     },

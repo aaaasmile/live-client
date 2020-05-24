@@ -15,6 +15,7 @@ type Config struct {
 	DebugSQL              bool
 	DebugParser           bool
 	SqliteDBPath          string
+	RepoSync              string
 }
 
 var Current = &Config{}

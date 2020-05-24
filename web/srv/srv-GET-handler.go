@@ -11,15 +11,11 @@ import (
 )
 
 type PageCtx struct {
-	Buildnr        string
-	RootUrl        string
-	ProjectName    string
-	Database       string
-	Repo           string
-	SplitFile      string
-	SplittedDir    string
-	DbLite         string
-	ImportFilename string
+	Buildnr  string
+	RootUrl  string
+	Database string
+	Repo     string
+	DbLite   string
 }
 
 func handleIndexGet(w http.ResponseWriter, req *http.Request) error {
@@ -28,6 +24,8 @@ func handleIndexGet(w http.ResponseWriter, req *http.Request) error {
 	pagectx := PageCtx{
 		RootUrl: conf.Current.RootURLPattern,
 		Buildnr: idl.Buildnr,
+		Repo:    conf.Current.RepoSync,
+		DbLite:  conf.Current.SqliteDBPath,
 	}
 	templName := "template/vue/index.html"
 

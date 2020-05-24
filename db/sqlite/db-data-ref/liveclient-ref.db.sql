@@ -10,4 +10,15 @@ CREATE TABLE IF NOT EXISTS "SourceFile" (
 	"FileModTime"	INTEGER,
 	"FileSize"	INTEGER
 );
+DROP TABLE IF EXISTS "ServerFile";
+CREATE TABLE IF NOT EXISTS "ServerFile" (
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"Name"	TEXT,
+	"ObjectID" TEXT,
+	"VersionList"	TEXT,
+	"Checksum"	TEXT,
+	"Filename"	TEXT,
+	"FileModTime"	INTEGER,
+	"FileSize"	INTEGER
+);
 COMMIT;
