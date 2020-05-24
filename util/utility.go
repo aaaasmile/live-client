@@ -83,8 +83,4 @@ func GenerateGUID2() string {
 	return guid
 }
 
-func GetInternalFilename(name string, version string) (string, string) {
-	id := GenerateGUID2()
-	res := fmt.Sprintf("%s-%s-%s", name, id, version)
-	return res, id
-}
+

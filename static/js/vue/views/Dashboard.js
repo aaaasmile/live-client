@@ -55,6 +55,7 @@ export default {
       API.CallSync(this, para)
     },
     newFile(){
+      this.dialogCreate = false
       let para = {filename: this.newfilename}
       console.log('New file, param ', para)
       API.NewFile(this, para)

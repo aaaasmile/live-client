@@ -1,9 +1,5 @@
 package idl
 
-import (
-	"time"
-)
-
 var (
 	Appname         = "LiveClient"
 	Buildnr         = "00.01.20200524-00"
@@ -29,14 +25,3 @@ type SourceFileWithErr struct {
 	Err        error
 }
 type ChanSourceFiles chan SourceFileWithErr
-
-type SourceFile struct {
-	DbLiteID    int
-	ObjectID    string
-	Name        string
-	VersionList string
-	Checksum    string
-	Filename    string
-	FileModTime time.Time
-	FileSize    int
-}

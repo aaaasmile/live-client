@@ -58,7 +58,7 @@ export default {
   NewFile(that, req) {
     that.loadingPage = true
     that.$http.post("NewFile", JSON.stringify(req), { headers: { "content-type": "application/json" } }).then(result => {
-      console.log('NewFile terminated ', result.data)
+      that.$store.commit('msgText', `File created with success`)
       handleSetViewDiff(result, that)
     }, error => {
       handleError(error, that)
