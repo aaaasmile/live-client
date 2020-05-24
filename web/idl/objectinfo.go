@@ -43,6 +43,7 @@ type ObjectInfo struct {
 	IDInDb      int
 	Timestamp   time.Time
 	SourceFile  SourceFile
+	ServerFile  SourceFile
 }
 
 func NewObjectInfoFromSF(sf SourceFile) *ObjectInfo {

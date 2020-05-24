@@ -92,7 +92,7 @@ func (ld *LiteDB) deleteSourceFile(tx *sql.Tx, recID int) error {
 	return err
 }
 
-func (ld *LiteDB) updateSourceFile(tx *sql.Tx, PrjID int, srcItem *idl.SourceFile) error {
+func (ld *LiteDB) updateSourceFile(tx *sql.Tx, srcItem *idl.SourceFile) error {
 	//fmt.Println("** oi updateSourceFile ", srcItem.FileModTime, srcItem.FileModTime.Local().Unix(), srcItem)
 	var q string
 	recID := srcItem.DbLiteID
@@ -164,7 +164,7 @@ func (ld *LiteDB) readAllSourceFile() ([]*idl.ObjectInfo, error) {
 	return result, nil
 }
 
-func (ld *LiteDB) insertSourceFile(tx *sql.Tx, PrjID int, srcItem *idl.SourceFile) error {
+func (ld *LiteDB) insertSourceFile(tx *sql.Tx, srcItem *idl.SourceFile) error {
 	q := `INSERT INTO SourceFile(Name,ObjectID,VersionList,Checksum,Filename,FileModTime,Filesize) 
 	VALUES (?,?,?,?,?,?,?);`
 	if ld.DebugSQL {

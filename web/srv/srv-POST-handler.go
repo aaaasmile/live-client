@@ -12,28 +12,22 @@ import (
 	"github.com/aaaasmile/live-client/web/idl"
 
 	"github.com/aaaasmile/live-client/conf"
-	"github.com/aaaasmile/live-client/db"
 	"github.com/aaaasmile/live-client/db/sqlite"
 	"github.com/aaaasmile/live-client/web/srv/checker"
 )
 
 type HandlerPrjReq struct {
-	storeNav            *checker.Store
 	storeSourceFile     *checker.Store
-	storeIgnoreList     *checker.Store
+	storeSeverFile      *checker.Store
 	liteDB              sqlite.LiteDB
-	ProjectInfo         *conf.ProjectInfo
-	BeyondComparePath   string
 	DebugSQL            bool
 	Debug               bool
-	chNavPersist        chan idl.ResErr
 	chSourceFilePersist chan idl.ResErr
 }
 
 type DoWithSelectionReq struct {
-	Selected     []string `json:"selected"`
-	Debug        bool     `json:"debug"`
-	SameDateFile bool     `json:"samedatefile"`
+	Selected []string `json:"selected"`
+	Debug    bool     `json:"debug"`
 }
 
 type DoWithSingleSelectionReq struct {
@@ -41,21 +35,15 @@ type DoWithSingleSelectionReq struct {
 	Debug    bool   `json:"debug"`
 }
 
-func NewHandlerSynchReq(prjInfo *conf.ProjectInfo, debugSQL bool) (*HandlerPrjReq, error) {
-	st1 := checker.NewStore(idl.OTPNavObj)
+func NewHandlerSynchReq(debugSQL bool) (*HandlerPrjReq, error) {
 	st2 := checker.NewStore(idl.OTPSourceFile)
-	st3 := checker.NewStore(idl.OTPIgnorelist)
 	res := HandlerPrjReq{
-		storeNav:        &st1,
 		storeSourceFile: &st2,
-		storeIgnoreList: &st3,
 		liteDB: sqlite.LiteDB{
-			DebugSQL:    debugSQL,
-			ProjectInfo: prjInfo,
+			DebugSQL:     debugSQL,
+			SqliteDBPath: conf.Current.SqliteDBPath,
 		},
-		ProjectInfo:       prjInfo,
-		DebugSQL:          debugSQL,
-		BeyondComparePath: conf.Current.BeyondComparePath,
+		DebugSQL: debugSQL,
 	}
 
 	err := res.liteDB.OpenSqliteDatabase()
@@ -67,7 +55,7 @@ func NewHandlerSynchReq(prjInfo *conf.ProjectInfo, debugSQL bool) (*HandlerPrjRe
 }
 
 func (h *HandlerPrjReq) Close() {
-	db.CloseDb()
+	log.Println("Handler close")
 }
 
 var handlePrjReq *HandlerPrjReq
@@ -94,7 +82,7 @@ func handlePostOperations(w http.ResponseWriter, req *http.Request) error {
 	}
 	var err error
 	if handlePrjReq == nil {
-		handlePrjReq, err = NewHandlerSynchReq(conf.Current.CurrentProject, conf.Current.DebugSQL)
+		handlePrjReq, err = NewHandlerSynchReq(conf.Current.DebugSQL)
 		if err != nil {
 			return err
 		}
@@ -105,20 +93,6 @@ func handlePostOperations(w http.ResponseWriter, req *http.Request) error {
 	switch lastPath {
 	case "CallSync":
 		err = handlePrjReq.HandleCallSync(w, req)
-	case "ViewDiff":
-		err = handlePrjReq.HandleViewCurrentDiff(w, req)
-	case "ExportToFile":
-		err = handlePrjReq.handleExportToFile(w, req)
-	case "IgnoreObj":
-		err = handlePrjReq.handleIgnoreObj(w, req)
-	case "SplitNAVFile":
-		err = handleSplitNAVFile(w, req)
-	case "ImportXpropToNAV":
-		err = handlePrjReq.handleImportXpropToNAV(w, req)
-	case "ImportSelectionToNav":
-		err = handlePrjReq.handleImportSelectionToNav(w, req)
-	case "CompareDiff":
-		err = handlePrjReq.handleCompareDiff(w, req)
 	default:
 		return fmt.Errorf("%s Not supported", lastPath)
 	}
