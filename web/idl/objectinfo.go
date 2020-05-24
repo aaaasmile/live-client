@@ -17,6 +17,7 @@ func (ot *ObjTypeInProv) String() string {
 
 const (
 	OTPSourceFile ObjTypeInProv = iota
+	OTPServerFile
 )
 
 type ObjProvider interface {

@@ -37,8 +37,10 @@ type DoWithSingleSelectionReq struct {
 
 func NewHandlerSynchReq(debugSQL bool) (*HandlerPrjReq, error) {
 	st2 := checker.NewStore(idl.OTPSourceFile)
+	st1 := checker.NewStore(idl.OTPServerFile)
 	res := HandlerPrjReq{
 		storeSourceFile: &st2,
+		storeSeverFile:  &st1,
 		liteDB: sqlite.LiteDB{
 			DebugSQL:     debugSQL,
 			SqliteDBPath: conf.Current.SqliteDBPath,

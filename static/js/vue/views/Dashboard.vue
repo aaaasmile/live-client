@@ -75,6 +75,16 @@
                 </v-expansion-panel>
               </v-expansion-panels>
               <TableDiff></TableDiff>
+              <v-card-actions>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon @click="dialogCreate = true" v-on="on">
+                      <v-icon>add</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Create a new File</span>
+                </v-tooltip>
+              </v-card-actions>
             </v-card>
           </v-skeleton-loader>
         </v-col>
@@ -88,6 +98,25 @@
               <v-spacer></v-spacer>
               <v-btn color="green darken-1" text @click="importServer">OK</v-btn>
               <v-btn color="green darken-1" text @click="dialogImport = false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogCreate" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">New File</v-card-title>
+           <v-container>
+            <v-col>
+              <v-row>
+                <v-col cols="10" md="8">
+                  <v-text-field v-model="newfilename" label="file name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-container>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="newFile">OK</v-btn>
+              <v-btn color="green darken-1" text @click="dialogCreate = false">Cancel</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
