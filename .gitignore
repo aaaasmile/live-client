@@ -1,0 +1,11 @@
+*.exe
+*.zip
+debug
+*.exe~
+*.log
+cert/tmp
+cert/tmp/*.*
+cert/*.pfx
+cert/*-enc.key
+scratch/*
+testdata/test-bfl100-dev.db

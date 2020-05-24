@@ -1,0 +1,44 @@
+{{define "base"}}
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="LiveClient" />
+
+  <title>LiveClient</title>
+
+  <!-- vuetify -->
+  <link href="./static/js/ext/fontcss.css" rel="stylesheet">
+  <link href="./static/js/ext/vuetify.min.css" rel="stylesheet">
+  <link href="./static/js/ext/icon.css" rel="stylesheet">
+  <link href="./static/js/ext/materialdesignicons.min.css" rel="stylesheet">
+
+  <!-- dev vue -->
+  <script src="{{.RootUrl}}static/js/ext/vue.js"></script>
+  <script src="{{.RootUrl}}static/js/ext/vue-resource.js"></script>
+  <!-- prod vue -->
+  <!-- <script src="{{.RootUrl}}static/js/ext/vue_prod.js"></script> -->
+
+  <!-- vuetify after vue-->
+  <script src="./static/js/ext/vuetify.js"></script>
+  <script src="./static/js/ext/vue-router.js"></script>
+  <script src="./static/js/ext/vuex.js"></script>
+
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+<script>
+  window.myapp = {
+    buildnr: "{{.Buildnr}}",
+  }
+</script>
+<script type="module">
+  import { app } from './static/js/vue/main.js'
+</script>
+
+</html>
+{{end}}
