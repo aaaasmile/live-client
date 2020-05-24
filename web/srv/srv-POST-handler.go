@@ -106,6 +106,8 @@ func handlePostOperations(w http.ResponseWriter, req *http.Request) error {
 		err = handlePrjReq.handleImportSelectionToServer(w, req)
 	case "CompareDiff":
 		err = handlePrjReq.handleCompareDiff(w, req)
+	case "NewFile":
+		err = handlePrjReq.handleNewFile(w, req)
 	default:
 		return fmt.Errorf("%s Not supported", lastPath)
 	}

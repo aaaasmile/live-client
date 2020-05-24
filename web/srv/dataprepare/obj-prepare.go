@@ -197,12 +197,13 @@ func (p *ObjectInfoPre) startScanFiles(wg *sync.WaitGroup, toprocess []os.FileIn
 		tokens <- struct{}{}
 		for _, fileInfo := range filesToProc {
 			var res idl.SourceFileWithErr
-			var name, id, fname string
+			var name, id, fname, version string
 			fname = fileInfo.Name()
-			fmt.Sscanf(fname, "%s-%d", &name, &id)
+			fmt.Sscanf(fname, "%s-%d-%s", &name, &id, &version)
 			sf := idl.SourceFile{
 				Name:        name,
 				ObjectID:    id,
+				VersionList: version,
 				Filename:    fname,
 				FileSize:    int(fileInfo.Size()),
 				FileModTime: fileInfo.ModTime(),

@@ -55,7 +55,9 @@ export default {
       API.CallSync(this, para)
     },
     newFile(){
-      console.log("New file TODO...")
+      let para = {filename: this.newfilename}
+      console.log('New file, param ', para)
+      API.NewFile(this, para)
     },
     startExplorer(){
       let para = { repo: this.$store.state.gen.prj.repo }
