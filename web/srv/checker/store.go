@@ -28,6 +28,9 @@ func (st *Store) InsertOrUpdateSingleObj(oi *idl.ObjectInfo) idl.ObjOpChangeType
 	// Keep in mind that this function should be called always inside the same routine.
 	// Changes will be propagate to the provider (sqlite) only if a StoreSynchronizer was activated before with StartSyncWithProv.
 	key := oi.Key
+	if key == "" {
+		panic("Key could not be empty")
+	}
 	ntfy := idl.ObjInfoChange{Obj: oi}
 	if st.InfoObjects[key] == nil {
 		ntfy.ChangeType = idl.OOCTinsert

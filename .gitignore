@@ -9,3 +9,4 @@ cert/*.pfx
 cert/*-enc.key
 scratch/*
 testdata/test-bfl100-dev.db
+__debug_bin

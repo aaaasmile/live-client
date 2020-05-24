@@ -194,17 +194,12 @@ func (p *ObjectInfoPre) startScanFiles(wg *sync.WaitGroup, toprocess []os.FileIn
 		for _, fileInfo := range filesToProc {
 			log.Println("Scan file ", fileInfo.Name())
 			var res idl.SourceFileWithErr
-			var name, id, fname, version string
-			fname = fileInfo.Name()
-			fmt.Sscanf(fname, "%s-%d-%s", &name, &id, &version)
 			sf := idl.SourceFile{
-				Name:        name,
-				ObjectID:    id,
-				VersionList: version,
-				Filename:    fname,
+				Filename:    fileInfo.Name(),
 				FileSize:    int(fileInfo.Size()),
 				FileModTime: fileInfo.ModTime(),
 			}
+			res.Err = sf.FillFromFname(fileInfo.Name())
 			res.SourceFile = sf
 			chsources <- res
 		}
