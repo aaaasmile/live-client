@@ -96,6 +96,16 @@ func handlePostOperations(w http.ResponseWriter, req *http.Request) error {
 	switch lastPath {
 	case "CallSync":
 		err = handlePrjReq.HandleCallSync(w, req)
+	case "ViewDiff":
+		err = handlePrjReq.HandleViewCurrentDiff(w, req)
+	case "OpenVsCode":
+		err = handlePrjReq.handleOpenVsCode(w, req)
+	case "ExportToFile":
+		err = handlePrjReq.handleExportToFile(w, req)
+	case "ImportSelectionToNav":
+		err = handlePrjReq.handleImportSelectionToServer(w, req)
+	case "CompareDiff":
+		err = handlePrjReq.handleCompareDiff(w, req)
 	default:
 		return fmt.Errorf("%s Not supported", lastPath)
 	}

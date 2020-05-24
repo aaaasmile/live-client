@@ -65,7 +65,9 @@ func (p *ObjectInfoPre) PrepareData() (chan idl.ResErr, error) {
 
 func (p *ObjectInfoPre) fetchRemoteObjects() error {
 
-	return fmt.Errorf("fetchRemoteObjects Not implemented")
+	log.Println("WARNING remote fetch is not implemented")
+
+	return nil
 }
 
 func (p *ObjectInfoPre) scanSourceFiles() error {

@@ -11,6 +11,8 @@ func (ot *ObjTypeInProv) String() string {
 	switch *ot {
 	case OTPSourceFile:
 		return "SourceFile"
+	case OTPServerFile:
+		return "Remote File"
 	}
 	return ""
 }
