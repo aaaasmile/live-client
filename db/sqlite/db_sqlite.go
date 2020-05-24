@@ -54,7 +54,7 @@ func (ld *LiteDB) DoReadAllObj(ot idl.ObjTypeInProv) ([]*idl.ObjectInfo, error) 
 func (ld *LiteDB) DoInsertObject(tx *sql.Tx, obj *idl.ObjectInfo, ot idl.ObjTypeInProv) error {
 	switch ot {
 	case idl.OTPSourceFile:
-		return ld.insertSourceFile(tx, ld.ProjectInfo.ID, &obj.SourceFile)
+		return ld.insertSourceFile(tx, &obj.SourceFile)
 	}
 	return fmt.Errorf("Type povider not recgonized %v", ot)
 }
@@ -62,7 +62,7 @@ func (ld *LiteDB) DoInsertObject(tx *sql.Tx, obj *idl.ObjectInfo, ot idl.ObjType
 func (ld *LiteDB) DoUpdateObject(tx *sql.Tx, obj *idl.ObjectInfo, ot idl.ObjTypeInProv) error {
 	switch ot {
 	case idl.OTPSourceFile:
-		return ld.updateSourceFile(tx, ld.ProjectInfo.ID, &obj.SourceFile)
+		return ld.updateSourceFile(tx, &obj.SourceFile)
 	}
 	return fmt.Errorf("Type povider not recgonized %v", ot)
 }
@@ -100,8 +100,7 @@ func (ld *LiteDB) updateSourceFile(tx *sql.Tx, PrjID int, srcItem *idl.SourceFil
 		panic("Recid could not be null")
 	}
 
-	q = fmt.Sprintf(`UPDATE SourceFile SET Modified=%d,Date='%s',Time='%s',Timestamp=%d,VersionList='%s',Filename='%s',Checksum='%s',FileModTime=%d,FileSize=%d WHERE id=%d;`,
-		srcItem.Modified, srcItem.Date, srcItem.Time, srcItem.Timestamp.Local().Unix(),
+	q = fmt.Sprintf(`UPDATE SourceFile SET VersionList='%s',Filename='%s',Checksum='%s',FileModTime=%d,FileSize=%d WHERE id=%d;`,
 		srcItem.VersionList, srcItem.Filename, srcItem.Checksum, srcItem.FileModTime.Local().Unix(), srcItem.FileSize,
 		recID)
 
@@ -130,11 +129,11 @@ func (ld *LiteDB) updateSourceFile(tx *sql.Tx, PrjID int, srcItem *idl.SourceFil
 }
 
 func (ld *LiteDB) readAllSourceFile() ([]*idl.ObjectInfo, error) {
-	q := `SELECT id,Type,Name,Modified,Timestamp,VersionList,Checksum,ObjectID,FileModTime,FileSize,Filename FROM SourceFile WHERE ProjectID = ?;`
+	q := `SELECT id,Name,VersionList,Checksum,ObjectID,FileModTime,FileSize,Filename FROM SourceFile;`
 	if ld.DebugSQL {
 		log.Println("Query is", q)
 	}
-	rows, err := ld.connDb.Query(q, ld.ProjectInfo.ID)
+	rows, err := ld.connDb.Query(q)
 	if err != nil {
 		return nil, err
 	}
@@ -142,14 +141,12 @@ func (ld *LiteDB) readAllSourceFile() ([]*idl.ObjectInfo, error) {
 	defer rows.Close()
 	for rows.Next() {
 		item := idl.SourceFile{}
-		var ts int64
 		var fileModTime, fileSize string
-		if err := rows.Scan(&item.DbLiteID, &item.Type, &item.Name, &item.Modified, &ts,
+		if err := rows.Scan(&item.DbLiteID, &item.Name,
 			&item.VersionList, &item.Checksum, &item.ObjectID, &fileModTime, &fileSize, &item.Filename); err != nil {
 			log.Println("Error in scan lite src ", err)
 			return nil, err
 		}
-		item.Timestamp = time.Unix(ts, 0)
 		mti, err := strconv.ParseInt(fileModTime, 10, 64)
 		if err != nil {
 			return nil, err
@@ -168,8 +165,8 @@ func (ld *LiteDB) readAllSourceFile() ([]*idl.ObjectInfo, error) {
 }
 
 func (ld *LiteDB) insertSourceFile(tx *sql.Tx, PrjID int, srcItem *idl.SourceFile) error {
-	q := `INSERT INTO SourceFile(Name,Type,ObjectID,Modified,Date,Time,Timestamp,VersionList,Projectid,Filename,Checksum,FileModTime,Filesize) 
-	VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);`
+	q := `INSERT INTO SourceFile(Name,ObjectID,VersionList,Checksum,Filename,FileModTime,Filesize) 
+	VALUES (?,?,?,?,?,?,?);`
 	if ld.DebugSQL {
 		log.Println("Query is", q)
 	}
@@ -179,8 +176,8 @@ func (ld *LiteDB) insertSourceFile(tx *sql.Tx, PrjID int, srcItem *idl.SourceFil
 		return err
 	}
 
-	_, err = tx.Stmt(insertMore).Exec(srcItem.Name, srcItem.Type, srcItem.ObjectID, srcItem.Modified, srcItem.Date, srcItem.Time, srcItem.Timestamp.Local().Unix(), srcItem.VersionList, PrjID,
-		srcItem.Filename, srcItem.Checksum, srcItem.FileModTime.Local().Unix(), srcItem.FileSize)
+	_, err = tx.Stmt(insertMore).Exec(srcItem.Name, srcItem.ObjectID, srcItem.VersionList, srcItem.Checksum,
+		srcItem.Filename, srcItem.FileModTime.Local().Unix(), srcItem.FileSize)
 	if err != nil {
 		return err
 	}

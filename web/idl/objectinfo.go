@@ -1,6 +1,31 @@
 package idl
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
+
+type ObjTypeInProv int
+
+func (ot *ObjTypeInProv) String() string {
+	switch *ot {
+	case OTPSourceFile:
+		return "SourceFile"
+	}
+	return ""
+}
+
+const (
+	OTPSourceFile ObjTypeInProv = iota
+)
+
+type ObjProvider interface {
+	DoReadAllObj(ObjTypeInProv) ([]*ObjectInfo, error)
+	GetNewTransaction() (*sql.Tx, error)
+	DoInsertObject(*sql.Tx, *ObjectInfo, ObjTypeInProv) error
+	DoUpdateObject(*sql.Tx, *ObjectInfo, ObjTypeInProv) error
+	DoDeleteObject(*sql.Tx, *ObjectInfo, ObjTypeInProv) error
+}
 
 type ObjectInfoColl []*ObjectInfo
 
@@ -20,23 +45,16 @@ type ObjectInfo struct {
 	SourceFile  SourceFile
 }
 
-func (oi *ObjectInfo) GetKey() string {
-	return oi.Key
-}
-
-func (oi *ObjectInfo) SetFieldsFromKey(key string) {
-	oi.Key = key
-}
-
 func NewObjectInfoFromSF(sf SourceFile) *ObjectInfo {
 	oi := ObjectInfo{
+		Key:         sf.ObjectID,
 		Name:        sf.Name,
 		VersionList: sf.VersionList,
 		Checksum:    sf.Checksum,
 		Timestamp:   sf.FileModTime,
 		SourceFile:  sf,
 	}
-	oi.Key = oi.GetKey()
+
 	return &oi
 }
 
