@@ -113,46 +113,47 @@ export default {
         <span>Export to local file</span>
       </v-tooltip>
     </v-toolbar>
-
-    <v-row justify="center">
-      <v-col class="mb-12" cols="12" md="10">
-        <v-skeleton-loader
-          :loading="loadingPage"
-          :transition="transition"
-          height="94"
-          type="list-item-two-line"
-        >
-          <v-card>
-            <div class="mx-4">
-              <div class="subtitle-2 text--secondary">
-                Local Repo: {{Repo}}
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn icon @click="startExplorer" v-on="on">
-                      <v-icon>mdi-file</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>View in File Explorer</span>
-                </v-tooltip>
+    <v-col class="mb-5" cols="12">
+      <v-row justify="center">
+        <v-col class="mb-5" cols="12">
+          <v-skeleton-loader
+            :loading="loadingPage"
+            :transition="transition"
+            height="94"
+            type="list-item-two-line"
+          >
+            <v-card>
+              <div class="mx-4">
+                <div class="subtitle-2 text--secondary">
+                  Local Repo: {{Repo}}
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon @click="startExplorer" v-on="on">
+                        <v-icon>mdi-file</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>View in File Explorer</span>
+                  </v-tooltip>
+                </div>
+                <div class="subtitle-2 text--secondary">DB local: {{DbLite}}</div>
               </div>
-              <div class="subtitle-2 text--secondary">DB local: {{DbLite}}</div>
-            </div>
-            <v-expansion-panels :flat="true">
-              <v-expansion-panel>
-                <v-expansion-panel-header>Options</v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row justify="space-around">
-                    <v-switch v-model="forcesource" class="ma-2" label="Force Source"></v-switch>
-                    <v-switch v-model="forceserver" class="ma-2" label="Force Server Objects"></v-switch>
-                    <v-switch v-model="debug" class="ma-2" label="Debug request"></v-switch>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-            <TableDiff></TableDiff>
-          </v-card>
-        </v-skeleton-loader>
-      </v-col>
+              <v-expansion-panels :flat="true">
+                <v-expansion-panel>
+                  <v-expansion-panel-header>Options</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-row justify="space-around">
+                      <v-switch v-model="forcesource" class="ma-2" label="Force Source"></v-switch>
+                      <v-switch v-model="forceserver" class="ma-2" label="Force Server Objects"></v-switch>
+                      <v-switch v-model="debug" class="ma-2" label="Debug request"></v-switch>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <TableDiff></TableDiff>
+            </v-card>
+          </v-skeleton-loader>
+        </v-col>
+      </v-row>
       <v-row justify="center">
         <v-dialog v-model="dialogImport" persistent max-width="290">
           <v-card>
@@ -166,7 +167,6 @@ export default {
           </v-card>
         </v-dialog>
       </v-row>
-    </v-row>
-  </v-card>
-`
+    </v-col>
+  </v-card>`
 }
