@@ -15,5 +15,6 @@ SyncRepo = "D:\\scratch\\go-lang\\live-client\\repo-sync"
 TempDir = "D:\\scratch\\go-lang\\live-client\\temp"
 BeyondComparePath = "C:\\Program Files (x86)\\Beyond Compare 3\\BCompare.exe"
 VsCodePath = "C:\\Users\\igors\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+ExplorerPath = "C:\\windows\\explorer.exe"
 RemoteServerURL = "127.0.0.1:5546" # Live Blog service URL
 

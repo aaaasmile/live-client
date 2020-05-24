@@ -100,6 +100,8 @@ func handlePostOperations(w http.ResponseWriter, req *http.Request) error {
 		err = handlePrjReq.HandleViewCurrentDiff(w, req)
 	case "OpenVsCode":
 		err = handlePrjReq.handleOpenVsCode(w, req)
+	case "OpenExplorer":
+		err = handlePrjReq.handleOpenExplorer(w, req)
 	case "ExportToFile":
 		err = handlePrjReq.handleExportToFile(w, req)
 	case "ImportSelectionToNav":

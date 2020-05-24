@@ -20,6 +20,7 @@ type Config struct {
 	RemoteServerURL       string
 	TempDir               string
 	VsCodePath            string
+	ExplorerPath          string
 }
 
 var Current = &Config{}

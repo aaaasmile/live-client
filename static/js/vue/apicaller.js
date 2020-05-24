@@ -39,7 +39,7 @@ export default {
   OpenExplorer(that, req) {
     that.$http.post("OpenExplorer", JSON.stringify(req), { headers: { "content-type": "application/json" } }).then(result => {
       console.log('Open Explorer terminated ', result.data)
-      that.$store.commit('msgText', `Status: ${result.data}`)
+      that.$store.commit('msgText', `Status: ${result.data.Status}`)
     }, error => {
       handleError(error, that)
     });

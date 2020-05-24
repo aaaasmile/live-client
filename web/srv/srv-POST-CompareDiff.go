@@ -14,6 +14,32 @@ import (
 	"github.com/aaaasmile/live-client/web/srv/remote"
 )
 
+func (hc *HandlerPrjReq) handleOpenExplorer(w http.ResponseWriter, req *http.Request) error {
+	paraDef := struct {
+		Repo string `json:"repo"`
+	}{}
+	if err := parseBodyReq(req, &paraDef); err != nil {
+		return err
+	}
+
+	cmd := conf.Current.ExplorerPath
+	if cmd == "" {
+		return fmt.Errorf("Explorer path not found")
+	}
+	if paraDef.Repo == "" {
+		return fmt.Errorf("Target dir is empty")
+	}
+
+	args := []string{paraDef.Repo}
+	log.Println("Execute: ", cmd, args)
+	exec.Command(cmd, args...).Output()
+
+	okResp := struct {
+		Status string
+	}{Status: "OK"}
+	return writeJsonResp(w, okResp)
+}
+
 func (hc *HandlerPrjReq) handleOpenVsCode(w http.ResponseWriter, req *http.Request) error {
 	paraDef := struct {
 		Repo string `json:"repo"`
