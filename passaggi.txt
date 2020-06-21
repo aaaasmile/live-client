@@ -1,3 +1,6 @@
+Questo è il client di live-blog. È concepito per essere eseguito localmente sul pc.
+Qui dovrebbero venir editati i files criptati e poi aggiornati sul server.
+
 == TODO
 [] Editor dei file per inserire un contenuto
 [] Aggiungi delete e edit come action
